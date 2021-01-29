@@ -1,6 +1,7 @@
 package com.farinhaki.seguradoraApi.models;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Random;
 
 import javax.persistence.Basic;
@@ -34,13 +35,18 @@ public class Apolice {
 	@Basic(optional=false)
 	private String placa;
 	
-	@Basic(optional = false)
-	@Column(name="vigencia_inicio", columnDefinition = "TIMESTAMP")
-	private LocalDateTime vigenciaInicio;
+	private boolean valida;
+	
+	private int vencimento;
 	
 	@Basic(optional = false)
-	@Column(name="vigencia_fim", columnDefinition = "TIMESTAMP")
-	private LocalDateTime vigenciaFim;
+	@Column(name="vigencia_inicio", columnDefinition = "DATE")
+	private LocalDate vigenciaInicio;
+	
+	@Basic(optional = false)
+	@Column(name="vigencia_fim", columnDefinition = "DATE")
+	private LocalDate vigenciaFim;
+	
 	
 	@Basic(optional = false)
 	@Column(name="valor")
@@ -74,19 +80,19 @@ public class Apolice {
 	public void setPlaca(String p) {
 		this.placa = p;
 	}
-	public LocalDateTime getVigenciaInicio() {
+	public LocalDate getVigenciaInicio() {
 		return vigenciaInicio;
 	}
 
-	public void setVigenciaInicio(LocalDateTime vigenciaInicio) {
+	public void setVigenciaInicio(LocalDate vigenciaInicio) {
 		this.vigenciaInicio = vigenciaInicio;
 	}
 
-	public LocalDateTime getVigenciaFim() {
+	public LocalDate getVigenciaFim() {
 		return vigenciaFim;
 	}
 
-	public void setVigenciaFim(LocalDateTime vigenciaFim) {
+	public void setVigenciaFim(LocalDate vigenciaFim) {
 		this.vigenciaFim = vigenciaFim;
 	}
 
@@ -96,6 +102,53 @@ public class Apolice {
 
 	public void setValor(Float valor) {
 		this.valor = valor;
+	}
+	
+	
+/***
+ * Verifica se a apolice continua dentro do periodo de validade
+ * @return
+ */
+	public boolean isValida() {
+		LocalDate today = LocalDate.now();
+		
+		if (today.isAfter(vigenciaInicio) && today.isBefore(vigenciaFim))
+			return true;
+		else
+			return false;
+	}
+
+	public void setValida(boolean valida) {
+		this.valida = valida;
+	}
+
+	/***
+	 * Verifica quanto tempo falta para o vencimento da apolice
+	 * @return numero de dias para o vencimento da apolice
+	 */
+	public int getVencimento() {
+		LocalDate today = LocalDate.now();
+		
+		if(isValida()) 
+			 return  Period.between(today, vigenciaFim).getDays();
+		else
+			return 0;	
+	}
+
+	public void setVencimento(int vencimento) {
+		this.vencimento = vencimento;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public void setNumero(int numero) {
+		this.numero = numero;
 	}
 
 	@Override
