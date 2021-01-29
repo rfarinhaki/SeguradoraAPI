@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.farinhaki</groupId>
-	<artifactId>customerApi</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>customerApi</name>
+	<artifactId>SeguradoraApi</artifactId>
+	<version>1.0</version>
+	<name>SeguradoraApi</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
